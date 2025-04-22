@@ -1,0 +1,75 @@
+Icarus Drone Application Change Log:
+
+22/04/2025
+	-	MainWindow.xaml
+			-	Added the numeric control to the main window.
+			-	Added the ListView.View and GridView xaml for both of the queues so they can be displayed.
+			-	Added the GridViewColumn to each of the ListViews so that the corresponding drone data can
+				be correctly bound to the item and displayed in the List View.
+			-	Added the parameter to the express service queue to open a new window when an item is clicked.
+			-	Added the parameter to the regular service queue to open a new window when an item is clicked.
+	-	MainWindow.xaml.cs
+			-	Fixed an issue with input fields displaying the wrong details once a drone has been entered.
+			-	Added a method to restrict input to numbers only for the service cost text box.
+			-	Added a method to Validate and format the value of the service cost text box when the textbox loses focus.
+			-	Added a method to open a new window each time the user selects a item from the express service List View.
+			-	Added a method to open a new window each time the user selects an item fromm the regular service list view.
+	-	Drone.cs
+			-	Added a function for getting the express service queue.
+			-	Added a function for getting the regular service queue.
+			-	Added a function for getting the list of completed services.
+			-	Added properties to make binding the details of the different drones to the List Views easier.
+			-	Added a function for dequeuing a drone from either of the queues.
+			-	Changed the service cost from float to double to bring it inline with assessment requirements.
+	-	Created new class (TextFormatter.cs), used to format text
+			-	Moved a function for formatting text to title case from Drone.cs.
+			-	Moved a function for formatting text to sentence case from Drone.cs.
+	-	CostCalculator.cs
+			-	Changed return type from float to double, to bring it in line with assessment requirements.
+	-	Created DetailWindow, this is used to display the service details when the user clicks on one of the list view
+		items in either the regular or express queue.
+	-	DetailWindow.xaml
+			-	Created the window layout.
+	-	DetailWindow.xaml.cs
+			-	Added a button to close the window when the user has finished viewing teh details.
+			-	Expanded the constructor to reguire teh details of the drone. This also sets the values to the text fields
+				on the window with the matching details.
+	-	All Scripts
+			-	Started adding comments as per assessment/CITEMS requirements.
+	-	Setup GitHub repo and tried to commit the project to it.
+
+
+17/04/2025
+	-	Removed the different User Controls as it was causing problems when trying to pass information
+		to the other panels.
+	-	Modified the MainWindow.xaml to include all of the layout components from the UserControls that were implemented.
+			-	All components still appear to be displaying correctly.
+	-	Added a CostCalculator class to the back end, that is only responsible for calculating the service cost.
+	-	Added a function to the MainWindow.xaml.cs to clear the conent of a TextBox when the user clicks into it.
+	-	Added a function to the MainWindow.xaml.cs to display messages on the status bar when the user completes an action.
+			-	Messages display as red if it failed to complete, green if it was successful.
+	-	Added a finction to the MainWindow.xaml.cs to handle what happens when the user presses the button to add a
+		new user.
+	-	Added a function to the MainWindow.xaml.cs to add the newly entered customer details into the correct
+		service queue.
+	-	Added a function to the MainWindow.xaml.cs to reset the TextBox's and clear the radio buttons when a new
+		customer is successfully added.
+	-	Added a function to the MainWindow.xaml.cs to check which of the service types the user has selected,
+		returning true if either are selected, false if none have been selected. This function is used to make sure
+		the user has eneted all of the fields when adding a new user.
+	-	Added a function to the MainWindow.xaml.cs for adding a new drone record.
+	
+
+15/04/2025 - Initial Creation
+	-	Created the initial WPF project for the front end.
+	-	Created a Class Library project to handle the backend functionality of the project.
+	-	Created the Drone class on the backend.
+	-	Created the Front end layout in WPF:
+			-	Main Window
+			-	Client Panel (User Control)
+			-	Completed Work Panel (User Control)
+			-	Queues Pannel (User Control)
+			-	The idea behind the use of user controls was to seperate the concerns of the different parts
+				of the front end, making each panel responsible for what its named after.
+	-	Created a ResourceDictionary to handle the colour palette for the application.
+	-	Added a reference to the ResourceDictionary to the App.xaml so it can be used.
