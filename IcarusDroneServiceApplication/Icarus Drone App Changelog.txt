@@ -15,6 +15,7 @@ Icarus Drone Application Change Log:
 			-	Added a method for removing a drone from the FinishedWorkList.
 			-	Added a delay to the SetStatusDetails method to reset the message after the new one
 				has been showm.
+			-	Removed a function that was no longer required.
 	-	Drone.cs
 			-	Added a method for removing a drone from the FinishedList.
 			-	Refactored into a cleaner data class.

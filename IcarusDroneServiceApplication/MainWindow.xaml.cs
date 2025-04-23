@@ -7,13 +7,22 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace IcarusDroneServiceApplication {
+    /// <summary>
+    /// The `MainWindow` class manages the UI and interactions for a drone service application. 
+    /// It handles drone registration, manages drone service queues (express and regular), and 
+    /// updates the status of service requests. It includes methods to add drones to service queues,
+    /// dequeue completed drones, and display details of drone service records in a new window. 
+    /// Additionally, it manages input validation, status messaging, and the updating of lists for 
+    /// ongoing and completed services.
+    /// </summary>
     public partial class MainWindow : Window {
         private DroneServiceManager dsManager;
         private ObservableCollection<Drone> finishedDrones;
         private DroneInputService inputService;
 
-        //  This constructor initializes the components of the MainWindow by calling InitializeComponent().
-        //  It then creates a new instance of the Drone class.
+        //  Initializes the `MainWindow` by setting up the `DroneServiceManager` and `DroneInputService` instances,
+        //  populating the `finishedDrones` collection with drones from the service manager's finished list, and binding
+        //  the `FinishedWorkList` to this collection to display the completed drone services in the UI.
         public MainWindow (){
             InitializeComponent();
             dsManager = new DroneServiceManager();
@@ -22,10 +31,8 @@ namespace IcarusDroneServiceApplication {
             FinishedWorkList.ItemsSource = finishedDrones;
         }
 
-        //  This method is triggered when a TextBox receives focus.
-        //  It clears the content of the TextBox if the sender is a valid TextBox object.
-        //  The TextBox is cast from the sender, and if the cast is successful,
-        //  it calls Clear() to remove any text inside.
+        //  This method handles the `GotFocus` event for a `TextBox`, clearing its content when it gains focus.
+        //  It checks if the sender is a `TextBox` and clears its text if true.
         private void TextBox_GotFocus (object sender, RoutedEventArgs e){
             TextBox? textBox = sender as TextBox;
 
@@ -34,10 +41,9 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This method updates the StatusDetailsText element based on the provided status.
-        //  If the status is true, it sets the text color to green (using a resource from the application),
-        //  and if false, it sets the text color to red.
-        //  It also updates the text content of StatusDetailsText with the provided message.
+        //  This method sets the status message and its corresponding text color based on a `status` flag.
+        //  It displays the message with a green or red color, waits for 2 seconds using `Task.Delay`, and
+        //  then resets the text to "Ready..." with a default color.
         public async void SetStatusDetails (string message, bool status) {
             if (status){
                 StatusDetailsText.Foreground = (Brush)Application.Current.Resources["greenText"];
@@ -52,10 +58,9 @@ namespace IcarusDroneServiceApplication {
             StatusDetailsText.Text = "Ready...";
         }
 
-        //  This method handles the click event for adding a new item.
-        //  It first checks if all required fields are filled and if a service type has been selected.
-        //  If any conditions are not met, it displays an error message with red text. If all conditions are satisfied,
-        //  it creates a new record and clears the input fields.
+        //  This method is triggered when the "Add New Item" button is clicked. It checks if all required fields
+        //  are filled and a service type is selected. If any of the conditions are not met, it displays an error
+        //  message. If everything is valid, it creates a new record and clears the input fields.
         private void AddNewItem_Click (object sender, RoutedEventArgs e){
             bool serviceTypeSelected = GetServicePriority();
 
@@ -67,12 +72,10 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This method creates a new Drone record based on the input fields.
-        //  It calculates the service cost using a CostCalculator, with adjustments
-        //  based on whether the express service is selected. It then creates a new
-        //  Drone object with the provided details and assigns it to droneRef.
-        //  The service tag is advanced, and the new drone is added to the appropriate
-        //  service queue.
+        //  This method creates a new drone service record by extracting and trimming the values from the input fields.
+        //  It checks if the registration is successful using the `TryRegisterDrone` method. If successful, it advances
+        //  the service tag and adds the drone to the appropriate queue (express or regular). If there is an error, it
+        //  displays an error message.
         private void CreateRecord (){
             string name = NameField.Text.Trim();
             string model = DetailsField.Text.Trim();
@@ -89,12 +92,10 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This function, calculates the cost of a service based on user input.
-        //  It retrieves a value from a text box (ServiceCostTextBox), checks if it's a valid number,
-        //  and then calculates the cost using the CostCalculator class. If the "Express" option is
-        //  selected (ExpressSelected.IsChecked), it calculates with express pricing; otherwise, it
-        //  calculates with standard pricing. The result is rounded to two decimal places and returned.
-        //  If the input is invalid, it displays an error message.
+        //  This method calculates the service cost based on the input value from the `ServiceCostTextBox`.
+        //  It checks if the service is express or regular and applies a surcharge if necessary using the
+        //  `CostCalculator`. The calculated value is rounded to two decimal places. If the input is invalid,
+        //  an error message is displayed.
         private double ReturnServiceValue (){
             CostCalculator calculator = new CostCalculator();
             double returnValue = 0;
@@ -114,10 +115,10 @@ namespace IcarusDroneServiceApplication {
             return returnValue;
         }
 
-        //  This method advances the value of the provided IntegerUpDown control by its increment value.
-        //  If the new value exceeds the maximum allowed value, it resets the value to the minimum, or
-        //  defaults to 100 if no minimum is specified. The method ensures that the control's value stays
-        //  within the defined range.
+        //  This method increments the value of an `IntegerUpDown` control.
+        //  It retrieves the current value, adds the increment, and checks if the new value exceeds the maximum.
+        //  If it does, the value is reset to the minimum value (or 100 by default). The updated value is then
+        //  assigned to the control.
         private void AdvanceServiceTag (Xceed.Wpf.Toolkit.IntegerUpDown control){
             if (control.Value.HasValue && control.Increment.HasValue){
                 int currentValue = control.Value.Value;
@@ -132,11 +133,9 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This method adds the newly created drone to either the Express Service or Regular Service queue
-        //  based on the service selection.
-        //  It updates the status message to confirm the addition, clears the current item list in the UI,
-        //  and then binds the updated queue to the appropriate list control
-        //  (ExpressServiceList or RegularServiceList).
+        //  This method adds a new customer to either the Express or Regular service queue based
+        //  on the user's selection. It then refreshes the corresponding queue and displays a
+        //  success message indicating which queue the customer was added to.
         private void AddToQueue (){
             if (ExpressSelected.IsChecked == true){
                 RefreshQueue(true);
@@ -147,9 +146,9 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This method resets the input fields to their default placeholder values
-        //  ("Name", "Details", "Cost", "Problem") and unchecks both the Express and
-        //  Regular service options. It prepares the form for the next input.
+        //  This method clears the input fields in the UI, resetting the text fields for name, details,
+        //  cost, and problem to their placeholder values ("Name", "Details", "Cost", and "Problem").
+        //  It also unchecks both the "Express" and "Regular" service type options.
         private void ClearInputFields (){
             NameField.Text = "Name";
             DetailsField.Text = "Details";
@@ -159,9 +158,9 @@ namespace IcarusDroneServiceApplication {
             RegularSelected.IsChecked = false;
         }
 
-        //  This method checks whether either the Express or Regular service option is selected.
-        //  If at least one is selected, it returns true, indicating a valid service priority;
-        //  otherwise, it returns false.
+        //  This method checks whether either the "Express" or "Regular" service type is selected.
+        //  It returns `true` if one of the options is selected, indicating that a valid service
+        //  priority has been chosen; otherwise, it returns `false`.
         private bool GetServicePriority (){
             if (ExpressSelected.IsChecked == true || RegularSelected.IsChecked == true){
                 return true;
@@ -170,17 +169,21 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This function ensures that only valid currency-style input is allowed in a TextBox.
-        //  It uses a regular expression to restrict user input to numbers with up to two decimal
-        //  places (e.g., 123, 123.45). If the input doesn't match, the keystroke is blocked.
+        //  This method restricts user input in the `ServiceCostTextBox` to only allow valid numeric
+        //  values with up to two decimal places. It uses a regular expression to check that the input
+        //  matches the pattern for a number, ensuring the input is properly formatted before it is processed.
+        //  If the input doesn't match the pattern, the `e.Handled` flag is set to `true`, preventing the
+        //  invalid input from being entered.
         private void ServiceCostTextBox_PreviewTextInput (object sender, TextCompositionEventArgs e){
             var regex = new Regex(@"^\d*(\.\d{0,2})?$");
             e.Handled = !regex.IsMatch((sender as TextBox).Text + e.Text);
         }
 
-        //  This function opens a DetailWindow showing information about the selected drone from a list.
-        //  When the window is closed, the selection in the ListView is cleared, allowing the user to
-        //  reselect the same item to view its details again.
+        //  This method handles the event when an item in the `ExpressServiceList` is selected.
+        //  It retrieves the selected `Drone` item and displays its details in a `DetailWindow`.
+        //  The details include the client's name, the drone model, the service problem, and the service cost.
+        //  After displaying the details, the window is centered relative to the main window. When the `DetailWindow`
+        //  is closed, the selected item in the `ExpressServiceList` is cleared.
         private void ExpressServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (ExpressServiceList.SelectedItem is Drone selectedItem){
                 SetStatusDetails(selectedItem.DisplayDetails(), true);
@@ -202,9 +205,11 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  This function opens a DetailWindow displaying details about the selected drone from the RegularServiceList.
-        //  When the window is closed, the selection in the RegularServiceList is cleared, allowing the user to reselect
-        //  the same item to view its details again.
+        //  This method handles the event when an item in the `RegularServiceList` is selected.
+        //  It retrieves the selected `Drone` and displays its details in a `DetailWindow`,
+        //  showing the client's name, the drone model, the service problem, and the service cost.
+        //  The window is positioned in the center of the main window. After the `DetailWindow` is
+        //  closed, the selected item in the `RegularServiceList` is cleared.
         private void RegularServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (RegularServiceList.SelectedItem is Drone selectedItem){
                 SetStatusDetails(selectedItem.DisplayDetails(), true);
@@ -226,6 +231,11 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
+        //  This method handles the event when the "Dequeue Express" button is clicked.
+        //  It checks if there are any items in the ExpressServiceList. If there are, it dequeues
+        //  the first drone from the express service queue, refreshes the queue, displays the finished
+        //  list, and updates the status message indicating the drone was successfully removed. If the
+        //  queue is empty, it sets an error message stating no drones were found to remove.
         private void DequeueExpress_Click (object sender, RoutedEventArgs e){
             if (ExpressServiceList.Items.Count > 0){
                 dsManager.DequeueDrone(true);
@@ -237,6 +247,11 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
+        //  This method handles the event when the "Dequeue Regular" button is clicked.
+        //  It checks if there are any items in the `RegularServiceList`. If there are,
+        //  it dequeues the first drone from the regular service queue, refreshes the queue,
+        //  updates the finished list, and displays a success message. If the queue is empty,
+        //  it shows an error message indicating no drones were found to remove.
         private void DequeueRegular_Click (object sender, RoutedEventArgs e){
             if (RegularServiceList.Items.Count > 0){
                 dsManager.DequeueDrone(false);
@@ -248,6 +263,11 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
+        //  This method refreshes the queue based on the `priority` parameter.
+        //  If `priority` is `true`, it updates the `ExpressServiceList` by setting its
+        //  `ItemsSource` to the current express service queue. If `priority` is `false`,
+        //  it updates the `RegularServiceList` with the current regular service queue.
+        //  It first clears the existing items to ensure the list is refreshed with the latest data.
         private void RefreshQueue (bool priority){
             if (priority){
                 ExpressServiceList.ItemsSource = null;
@@ -258,30 +278,21 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
+        //  This method updates the `FinishedWorkList` by first clearing its current items
+        //  (`ItemsSource = null`) and then setting its `ItemsSource` to the current list of
+        //  finished drones from `dsManager.GetFinishedList()`, ensuring that the list displays
+        //  the latest completed drones.
         private void DisplayFinishedList (){
             FinishedWorkList.ItemsSource = null;
             FinishedWorkList.ItemsSource = dsManager.GetFinishedList();
         }
 
-        private void CompletedServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
-            if (FinishedWorkList.SelectedItem is Drone selectedItem){
-                var detailWindow = new DetailWindow(
-                    selectedItem.DisplayClientName,
-                    selectedItem.DisplayDroneModel,
-                    selectedItem.DisplayServiceProblem,
-                    selectedItem.DisplayServiceCost.ToString());
-                
-                detailWindow.Owner = this;
-                detailWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
-
-                detailWindow.Closed += (s, args) => {
-                    FinishedWorkList.SelectedItem = null;
-                };
-
-                detailWindow.ShowDialog();
-            }
-        }
-
+        //  This method handles the mouse double-click event on the `FinishedWorkList`.
+        //  When a drone is double-clicked, it removes the selected drone from both the
+        //  `finishedDrones` collection and the `DroneServiceManager`'s finished list.
+        //  Afterward, it updates the display of the finished list and shows a success
+        //  message indicating that the drone was successfully deleted from the completed
+        //  work list.
         private void FinishedWorkList_MouseDoubleClick (object sender, MouseButtonEventArgs e){
             if (FinishedWorkList.SelectedItem is Drone selectedItem){
                 dsManager.RemoveDroneFromFinishedList(selectedItem);
