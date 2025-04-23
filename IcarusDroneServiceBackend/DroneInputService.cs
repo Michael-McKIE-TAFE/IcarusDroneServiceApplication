@@ -27,9 +27,7 @@
                 return false;
             }
 
-            double calculatedCost = Math.Round(_calculator.CalculateCost(costInput, isExpress), 2);
-
-            _dsManager.RegisterDrone(name.Trim(), model.Trim(), problem.Trim(), calculatedCost, tagNumber, isExpress);
+            _dsManager.RegisterDrone(name.Trim(), model.Trim(), problem.Trim(), costInput, tagNumber, isExpress);
             return true;
         }
     }

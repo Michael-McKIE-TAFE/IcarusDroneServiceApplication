@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace IcarusDroneServiceApplication {
     /// <summary>
-    /// The `MainWindow` class manages the UI and interactions for a drone service application. 
+    /// This class manages the UI and interactions for a drone service application. 
     /// It handles drone registration, manages drone service queues (express and regular), and 
     /// updates the status of service requests. It includes methods to add drones to service queues,
     /// dequeue completed drones, and display details of drone service records in a new window. 
@@ -287,13 +287,21 @@ namespace IcarusDroneServiceApplication {
             FinishedWorkList.ItemsSource = dsManager.GetFinishedList();
         }
 
-        //  This method handles the mouse double-click event on the `FinishedWorkList`.
-        //  When a drone is double-clicked, it removes the selected drone from both the
-        //  `finishedDrones` collection and the `DroneServiceManager`'s finished list.
-        //  Afterward, it updates the display of the finished list and shows a success
-        //  message indicating that the drone was successfully deleted from the completed
-        //  work list.
+        //  This method handles the mouse double-click event on the FinishedWorkList.
         private void FinishedWorkList_MouseDoubleClick (object sender, MouseButtonEventArgs e){
+            RemoveFromList();
+        }
+
+        //  This method handles the button pressed event for the Finalise Button
+        private void FinaliseButton_Click (object sender, RoutedEventArgs e){
+            RemoveFromList();
+        }
+
+        //  When a drone is double-clicked or the Finalise button is pressed, it removes
+        //  the selected drone from both the finishedDrones collection and the DroneServiceManager's
+        //  finished list. Afterward, it updates the display of the finished list and shows a success
+        //  message indicating that the drone was successfully deleted from the completed work list.
+        private void RemoveFromList (){
             if (FinishedWorkList.SelectedItem is Drone selectedItem){
                 dsManager.RemoveDroneFromFinishedList(selectedItem);
                 finishedDrones.Remove(selectedItem);

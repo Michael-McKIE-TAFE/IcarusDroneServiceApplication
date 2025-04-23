@@ -146,7 +146,8 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button Content="Finalise" FontSize="16" Margin="5" Width="150" />
+                    <Button Content="Finalise" FontSize="16" Margin="5" Width="150" 
+                            Click="FinaliseButton_Click"/>
                 </StackPanel>
             </StackPanel>
 
