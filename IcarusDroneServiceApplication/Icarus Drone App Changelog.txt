@@ -1,5 +1,28 @@
 Icarus Drone Application Change Log:
 
+23/04/2025
+	-	MainWindow.xaml
+			-	Added the click event parameter to the Button in the Express Service Queue section.
+			-	Added the click event parameter to the button in the Regular service Queue section.
+			-	Changed the ListView in the completed service section to a ListBox, to bring it into
+				line with assessment requirements.
+			-	Added the double click event parameter to the FinishedWorkList ListBox.
+	-	MainWindow.xaml.cs
+			-	Added a method for dequeuing a drone in the Express Service Queue.
+			-	Added a method to refresh the queue once an item had been removed.
+			-	Added a method for updating and displaying the updated list of completed work.
+			-	Added a method for dequeuing a drone in the Regular Service Queue.
+			-	Added a method for removing a drone from the FinishedWorkList.
+			-	Added a delay to the SetStatusDetails method to reset the message after the new one
+				has been showm.
+	-	Drone.cs
+			-	Added a method for removing a drone from the FinishedList.
+			-	Refactored into a cleaner data class.
+	-	Created DroneServiceManager.cs
+			-	Moved all the queue and list functionality from the Drone.cs class into this one.
+	-	Created DroneInputService.cs
+
+
 22/04/2025
 	-	MainWindow.xaml
 			-	Added the numeric control to the main window.

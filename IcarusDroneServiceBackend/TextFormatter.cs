@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IcarusDroneServiceBackend {
+﻿namespace IcarusDroneServiceBackend {
     internal class TextFormatter {
         //  This function takes a string and formats it into sentence case.
         //  If the input is null or empty, it returns the input unchanged.

@@ -1,28 +1,25 @@
 ﻿using IcarusDroneServiceBackend;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Schema;
-using Xceed.Wpf.AvalonDock;
-using Xceed.Wpf.Toolkit;
 
 namespace IcarusDroneServiceApplication {
     public partial class MainWindow : Window {
-        private Drone droneRef;
+        private DroneServiceManager dsManager;
+        private ObservableCollection<Drone> finishedDrones;
+        private DroneInputService inputService;
 
         //  This constructor initializes the components of the MainWindow by calling InitializeComponent().
         //  It then creates a new instance of the Drone class.
         public MainWindow (){
             InitializeComponent();
-            droneRef = new Drone();
+            dsManager = new DroneServiceManager();
+            inputService = new DroneInputService(dsManager);    
+            finishedDrones = new ObservableCollection<Drone>(dsManager.GetFinishedList());
+            FinishedWorkList.ItemsSource = finishedDrones;
         }
 
         //  This method is triggered when a TextBox receives focus.
@@ -41,7 +38,7 @@ namespace IcarusDroneServiceApplication {
         //  If the status is true, it sets the text color to green (using a resource from the application),
         //  and if false, it sets the text color to red.
         //  It also updates the text content of StatusDetailsText with the provided message.
-        public void SetStatusDetails (string message, bool status) {
+        public async void SetStatusDetails (string message, bool status) {
             if (status){
                 StatusDetailsText.Foreground = (Brush)Application.Current.Resources["greenText"];
             } else {
@@ -49,6 +46,10 @@ namespace IcarusDroneServiceApplication {
             }
 
             StatusDetailsText.Text = message;
+
+            await Task.Delay(2000);
+            StatusDetailsText.Foreground = (Brush)Application.Current.Resources["whiteText"];
+            StatusDetailsText.Text = "Ready...";
         }
 
         //  This method handles the click event for adding a new item.
@@ -73,22 +74,19 @@ namespace IcarusDroneServiceApplication {
         //  The service tag is advanced, and the new drone is added to the appropriate
         //  service queue.
         private void CreateRecord (){
-            CostCalculator calculator = new CostCalculator();
-
             string name = NameField.Text.Trim();
             string model = DetailsField.Text.Trim();
             string problem = ProblemField.Text.Trim();
             double amount = ReturnServiceValue();
             int tagNumber = (TagNumber.Value ?? 0);
+            bool isExpress = ExpressSelected.IsChecked == true;
 
-            if (ExpressSelected.IsChecked == true){
-                droneRef = new Drone(name, model, problem, amount, tagNumber, true);
+            if (inputService.TryRegisterDrone(name, model, problem, amount, tagNumber, isExpress, out string errorMsg)){
+                AdvanceServiceTag(TagNumber);
+                AddToQueue();
             } else {
-                droneRef = new Drone(name, model, problem, amount, tagNumber, false);
+                SetStatusDetails(errorMsg, false);
             }
-
-            AdvanceServiceTag(TagNumber);
-            AddToQueue();
         }
 
         //  This function, calculates the cost of a service based on user input.
@@ -141,14 +139,11 @@ namespace IcarusDroneServiceApplication {
         //  (ExpressServiceList or RegularServiceList).
         private void AddToQueue (){
             if (ExpressSelected.IsChecked == true){
+                RefreshQueue(true);
                 SetStatusDetails("Successfully added new customer to the Express Service queue.", true);
-
-                ExpressServiceList.ItemsSource = null;
-                ExpressServiceList.ItemsSource = droneRef.GetExpressQueue().ToList();
             } else {
+                RefreshQueue(false);
                 SetStatusDetails("Successfully added new customer to the Regular Service queue.", true);
-                RegularServiceList.ItemsSource= null;
-                RegularServiceList.ItemsSource = droneRef.GetRegularQueue().ToList();
             }
         }
 
@@ -188,6 +183,8 @@ namespace IcarusDroneServiceApplication {
         //  reselect the same item to view its details again.
         private void ExpressServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (ExpressServiceList.SelectedItem is Drone selectedItem){
+                SetStatusDetails(selectedItem.DisplayDetails(), true);
+
                 var detailWindow = new DetailWindow(
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
@@ -210,6 +207,8 @@ namespace IcarusDroneServiceApplication {
         //  the same item to view its details again.
         private void RegularServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (RegularServiceList.SelectedItem is Drone selectedItem){
+                SetStatusDetails(selectedItem.DisplayDetails(), true);
+
                 var detailWindow = new DetailWindow(
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
@@ -224,6 +223,71 @@ namespace IcarusDroneServiceApplication {
                 };
 
                 detailWindow.ShowDialog();
+            }
+        }
+
+        private void DequeueExpress_Click (object sender, RoutedEventArgs e){
+            if (ExpressServiceList.Items.Count > 0){
+                dsManager.DequeueDrone(true);
+                RefreshQueue(true);
+                DisplayFinishedList();
+                SetStatusDetails("Successfully removed the Drone from the Express Service Queue.", true);
+            } else {
+                SetStatusDetails("Unable to remove the Drone from the Express Service Queue, no Drone was found", false);
+            }
+        }
+
+        private void DequeueRegular_Click (object sender, RoutedEventArgs e){
+            if (RegularServiceList.Items.Count > 0){
+                dsManager.DequeueDrone(false);
+                RefreshQueue(false);
+                DisplayFinishedList();
+                SetStatusDetails("Successfully removed the Drone from the Regular Service Queue.", true);
+            } else {
+                SetStatusDetails("Unable to remove the Drone from the Regular Service Queue, no Drone was found", false);
+            }
+        }
+
+        private void RefreshQueue (bool priority){
+            if (priority){
+                ExpressServiceList.ItemsSource = null;
+                ExpressServiceList.ItemsSource = dsManager.GetExpressQueue().ToList();
+            } else {
+                RegularServiceList.ItemsSource = null;
+                RegularServiceList.ItemsSource = dsManager.GetRegularQueue().ToList();
+            }
+        }
+
+        private void DisplayFinishedList (){
+            FinishedWorkList.ItemsSource = null;
+            FinishedWorkList.ItemsSource = dsManager.GetFinishedList();
+        }
+
+        private void CompletedServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
+            if (FinishedWorkList.SelectedItem is Drone selectedItem){
+                var detailWindow = new DetailWindow(
+                    selectedItem.DisplayClientName,
+                    selectedItem.DisplayDroneModel,
+                    selectedItem.DisplayServiceProblem,
+                    selectedItem.DisplayServiceCost.ToString());
+                
+                detailWindow.Owner = this;
+                detailWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
+
+                detailWindow.Closed += (s, args) => {
+                    FinishedWorkList.SelectedItem = null;
+                };
+
+                detailWindow.ShowDialog();
+            }
+        }
+
+        private void FinishedWorkList_MouseDoubleClick (object sender, MouseButtonEventArgs e){
+            if (FinishedWorkList.SelectedItem is Drone selectedItem){
+                dsManager.RemoveDroneFromFinishedList(selectedItem);
+                finishedDrones.Remove(selectedItem);
+                DisplayFinishedList();
+                SetStatusDetails("Successfully Deleted the Drone from the Completed Work List.", true);
             }
         }
     }
