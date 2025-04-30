@@ -16,12 +16,13 @@ namespace IcarusDroneServiceApplication {
         //  `ServiceCostTextBox`). This allows the `DetailWindow` to display the details of a drone when
         //  it is instantiated. The `TextBox` values are populated with the provided data when the window
         //  is created.
-        public DetailWindow (string clientName, string droneModel, string serviceProblem, string serviceCost){
+        public DetailWindow (string clientName, string droneModel, string serviceProblem, string serviceCost, string serviceTag){
             InitializeComponent();
             ClientNameTextBox.Text = clientName;
             DroneModelTextBox.Text = droneModel;
             ServiceProblemTextBox.Text = serviceProblem;
             ServiceCostTextBox.Text = serviceCost;
+            ServiceTagTextBox.Text = serviceTag;
         }
 
         //  The `CloseButton_Click` method is an event handler for the `Click` event of the

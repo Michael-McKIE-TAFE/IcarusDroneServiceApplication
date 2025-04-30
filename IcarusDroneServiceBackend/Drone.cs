@@ -6,35 +6,37 @@
     /// the client's name and service cost. The class is primarily used for representing drone service information.
     /// </summary>
     public class Drone {
-        public string ClientName { get; }
-        public string DroneModel { get; }
-        public string ServiceProblem { get; }
-        public double ServiceCost { get; }
-        public int ServiceTag { get; }
+        private string clientName;
+        private string droneModel;
+        private string serviceProblem;
+        private double serviceCost;
+        private int serviceTag;
 
-        public string DisplayClientName => ClientName;
-        public string DisplayDroneModel => DroneModel;
-        public string DisplayServiceProblem => ServiceProblem;
-        public double DisplayServiceCost => ServiceCost;
-        public int DisplayServiceTag => ServiceTag;
+        public string DisplayClientName => clientName;
+        public string DisplayDroneModel => droneModel;
+        public string DisplayServiceProblem => serviceProblem;
+        public double DisplayServiceCost => serviceCost;
+        public int DisplayServiceTag => serviceTag;
 
         //  This constructor initializes a `Drone` object with the given parameters:
         //  client name, drone model, service problem, service cost, and service tag.
         //  It assigns these values to the respective properties of the `Drone` class
         //  for use in further operations.
-        public Drone (string clientName, string droneModel, string serviceProblem, double serviceCost, int serviceTag){
-            ClientName = clientName;
-            DroneModel = droneModel;
-            ServiceProblem = serviceProblem;
-            ServiceCost = serviceCost;
-            ServiceTag = serviceTag;
+        public Drone (string name, string model, string problem, double cost, int tag){
+            clientName = name;
+            droneModel = model;
+            serviceProblem = problem;
+            serviceCost = cost;
+            serviceTag = tag;
         }
 
         //  This method returns a formatted string containing the client's name and the service
         //  cost of the drone, with the cost displayed as a currency value. It provides a concise
         //  summary of the drone's details for display purposes.
+        //  Given that data binding is used, this function feels irrelevent, and is only here to
+        //  meet the programming specs outlined in assessment doc.
         public string DisplayDetails (){
-            return $"Client: {ClientName}\t\t\tService Cost: {ServiceCost:C}";
+            return $"Client: {clientName}\t\t\tService Cost: {serviceCost:C}";
         }
     }
 }

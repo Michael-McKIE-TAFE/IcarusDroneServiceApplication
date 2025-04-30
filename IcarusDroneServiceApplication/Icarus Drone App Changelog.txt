@@ -1,5 +1,24 @@
 Icarus Drone Application Change Log:
 
+30/04/2025
+	-	DroneInputService.cs
+			-	Removed an unneccessary reference to the cost calculator class.
+			-	Moved the method for calculating the service cost from Main Window.xaml.cs to this class.
+	-	Drone.cs
+			-	Changed the protection level of some of the variables.
+	-	DetailWindow.xaml
+			-	Added a text box to display the service tag details.
+	-	DetailWindow.xaml.cs
+			-	Added the logic for displaying the service tag.
+	-	MainWindow.xaml.cs
+			-	Added the service tag details when calling the detail window.
+			-	Removed redundant variable re-assignment.
+			-	Removed the calculate service cost method.
+	-	DroneServiceManager.cs
+			-	General Tidy up.
+			-	Added protection against a possible null reference exception.
+
+
 23/04/2025
 	-	MainWindow.xaml
 			-	Added the click event parameter to the Button in the Express Service Queue section.

@@ -6,10 +6,6 @@
     /// and regular services, along with a list of finished drones.
     /// </summary>
     public class DroneServiceManager {
-        public List<Drone> GetFinishedList() => new(finishedList);
-        public Queue<Drone> GetExpressQueue() => new(expressService);
-        public Queue<Drone> GetRegularQueue() => new(regularService);
-        
         private readonly List<Drone>? finishedList = new List<Drone>();
         private readonly Queue<Drone>? regularService = new Queue<Drone>();
         private readonly Queue<Drone>? expressService = new Queue<Drone>();
@@ -58,6 +54,35 @@
         //  is not null, the specified drone is removed from the list.
         public void RemoveDroneFromFinishedList (Drone drone){
             finishedList?.Remove(drone);
+        }
+
+        //  Returns the finished work list
+        public List<Drone> GetFinishedList (){
+            if (finishedList == null){
+                return new List<Drone>();
+            }
+
+            return finishedList;
+        }
+
+        //  Returns the express service queue
+        //  Returns an empty queue to avoid a possible crash if the
+        //  express service queue happens to be null.
+        public Queue<Drone> GetExpressQueue (){
+            if (expressService == null){
+                return new Queue<Drone>();
+            }
+
+            return expressService;
+        }
+
+        //  Returns the regular service queue.
+        public Queue<Drone> GetRegularQueue (){ 
+            if (regularService == null){
+                return new Queue<Drone>();
+            }
+
+            return regularService; 
         }
     }
 }

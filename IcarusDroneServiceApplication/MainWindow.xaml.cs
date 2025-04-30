@@ -80,9 +80,13 @@ namespace IcarusDroneServiceApplication {
             string name = NameField.Text.Trim();
             string model = DetailsField.Text.Trim();
             string problem = ProblemField.Text.Trim();
-            double amount = ReturnServiceValue();
             int tagNumber = (TagNumber.Value ?? 0);
             bool isExpress = ExpressSelected.IsChecked == true;
+            double amount = inputService.GetCostInput(ServiceCostTextBox.Text, isExpress);
+
+            if (amount == -1){
+                SetStatusDetails("Please enter a valid service cost.", false);
+            }
 
             if (inputService.TryRegisterDrone(name, model, problem, amount, tagNumber, isExpress, out string errorMsg)){
                 AdvanceServiceTag(TagNumber);
@@ -90,29 +94,6 @@ namespace IcarusDroneServiceApplication {
             } else {
                 SetStatusDetails(errorMsg, false);
             }
-        }
-
-        //  This method calculates the service cost based on the input value from the `ServiceCostTextBox`.
-        //  It checks if the service is express or regular and applies a surcharge if necessary using the
-        //  `CostCalculator`. The calculated value is rounded to two decimal places. If the input is invalid,
-        //  an error message is displayed.
-        private double ReturnServiceValue (){
-            CostCalculator calculator = new CostCalculator();
-            double returnValue = 0;
-
-            if (double.TryParse(ServiceCostTextBox.Text, out double value)){
-                if (ExpressSelected.IsChecked == true){
-                    returnValue = calculator.CalculateCost(value, true);
-                    returnValue = Math.Round(returnValue, 2);
-                } else {
-                    returnValue = calculator.CalculateCost(value, false);
-                    returnValue = Math.Round(returnValue, 2);
-                }
-            } else {
-                SetStatusDetails("Please enter a valid service cost.", false);
-            }
-
-            return returnValue;
         }
 
         //  This method increments the value of an `IntegerUpDown` control.
@@ -192,7 +173,9 @@ namespace IcarusDroneServiceApplication {
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
                     selectedItem.DisplayServiceProblem,
-                    selectedItem.DisplayServiceCost.ToString());
+                    selectedItem.DisplayServiceCost.ToString(),
+                    selectedItem.DisplayServiceTag.ToString());
+
                 
                 detailWindow.Owner = this;
                 detailWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
@@ -218,7 +201,8 @@ namespace IcarusDroneServiceApplication {
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
                     selectedItem.DisplayServiceProblem,
-                    selectedItem.DisplayServiceCost.ToString());
+                    selectedItem.DisplayServiceCost.ToString(),
+                    selectedItem.DisplayServiceTag.ToString());
                 
                 detailWindow.Owner = this;
                 detailWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;

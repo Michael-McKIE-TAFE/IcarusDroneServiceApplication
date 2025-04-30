@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IcarusDroneServiceApplication"
         mc:Ignorable="d"
-        Title="Service Details" Height="250" Width="400"
+        Title="Service Details" Height="275" Width="400"
         WindowStyle="None" Background="Transparent"
         AllowsTransparency="True">
     <Border Background="{StaticResource darkGrey}" CornerRadius="8"
@@ -13,6 +13,14 @@
             BorderBrush="{StaticResource greenText}">
         <Grid>
             <StackPanel Margin="10">
+                <TextBlock Text="Service Tag:" FontWeight="Bold"
+                           Foreground="{StaticResource whiteText}"/>
+
+                <TextBox Name="ServiceTagTextBox" IsReadOnly="True" Margin="5"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Foreground="{StaticResource whiteText}"/>
+
                 <!--    Customer Details Section    -->
                 <TextBlock Text="Client Name:" FontWeight="Bold"
                            Foreground="{StaticResource whiteText}"/>

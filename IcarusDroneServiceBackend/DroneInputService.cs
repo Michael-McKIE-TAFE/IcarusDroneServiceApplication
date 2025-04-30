@@ -28,5 +28,22 @@
             _dsManager.RegisterDrone(name.Trim(), model.Trim(), problem.Trim(), costInput, tagNumber, isExpress);
             return true;
         }
+
+        public double GetCostInput(string text, bool priority){
+            CostCalculator calculator = new CostCalculator();
+            double returnValue = 0;
+
+            if (double.TryParse(text, out double value)){
+                if (priority){
+                    returnValue = Math.Round(calculator.CalculateCost(value, true), 2);
+                } else {
+                    returnValue = Math.Round(calculator.CalculateCost(value, false), 2);
+                }
+
+                return returnValue;
+            } else {
+                return -1;
+            }
+        }
     }
 }
