@@ -14,6 +14,7 @@ Icarus Drone Application Change Log:
 			-	Added the service tag details when calling the detail window.
 			-	Removed redundant variable re-assignment.
 			-	Removed the calculate service cost method.
+			-	Fixed a potential null reference exception.
 	-	DroneServiceManager.cs
 			-	General Tidy up.
 			-	Added protection against a possible null reference exception.

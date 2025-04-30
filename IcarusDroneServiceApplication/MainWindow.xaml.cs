@@ -156,8 +156,10 @@ namespace IcarusDroneServiceApplication {
         //  If the input doesn't match the pattern, the `e.Handled` flag is set to `true`, preventing the
         //  invalid input from being entered.
         private void ServiceCostTextBox_PreviewTextInput (object sender, TextCompositionEventArgs e){
-            var regex = new Regex(@"^\d*(\.\d{0,2})?$");
-            e.Handled = !regex.IsMatch((sender as TextBox).Text + e.Text);
+            if (sender is TextBox textBox){
+                var regex = new Regex(@"^\d*(\.\d{0,2})?$");
+                e.Handled = !regex.IsMatch(textBox.Text + e.Text);
+            }
         }
 
         //  This method handles the event when an item in the `ExpressServiceList` is selected.
