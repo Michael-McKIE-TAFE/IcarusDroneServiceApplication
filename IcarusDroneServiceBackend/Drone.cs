@@ -33,7 +33,7 @@
         //  This method returns a formatted string containing the client's name and the service
         //  cost of the drone, with the cost displayed as a currency value. It provides a concise
         //  summary of the drone's details for display purposes.
-        //  Given that data binding is used, this function feels irrelevent, and is only here to
+        //  Given that data binding is used, this method feels irrelevent, and is only here to
         //  meet the programming specs outlined in assessment doc.
         public string DisplayDetails (){
             return $"Client: {clientName}\t\t\tService Cost: {serviceCost:C}";
