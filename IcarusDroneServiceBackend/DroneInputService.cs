@@ -5,14 +5,12 @@
     /// If the input is invalid, it returns an error message.
     /// </summary>
     public class DroneInputService {
-        private readonly CostCalculator _calculator;
         private readonly DroneServiceManager _dsManager;
 
         //  Initializes the service with a DroneServiceManager instance and a new CostCalculator.
         //  It sets up the necessary dependencies for drone registration and cost calculation.
         public DroneInputService (DroneServiceManager dsManager){
             _dsManager = dsManager;
-            _calculator = new CostCalculator();
         }
 
         //  Attempts to register a drone by validating input fields for completeness and valid cost data.
