@@ -169,8 +169,6 @@ namespace IcarusDroneServiceApplication {
         //  is closed, the selected item in the `ExpressServiceList` is cleared.
         private void ExpressServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (ExpressServiceList.SelectedItem is Drone selectedItem){
-                SetStatusDetails(selectedItem.DisplayDetails(), true);
-
                 var detailWindow = new DetailWindow(
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
@@ -197,8 +195,6 @@ namespace IcarusDroneServiceApplication {
         //  closed, the selected item in the `RegularServiceList` is cleared.
         private void RegularServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
             if (RegularServiceList.SelectedItem is Drone selectedItem){
-                SetStatusDetails(selectedItem.DisplayDetails(), true);
-
                 var detailWindow = new DetailWindow(
                     selectedItem.DisplayClientName,
                     selectedItem.DisplayDroneModel,
