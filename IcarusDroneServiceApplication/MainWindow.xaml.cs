@@ -64,7 +64,7 @@ namespace IcarusDroneServiceApplication {
 
                 StatusDetailsText.Text = message;
 
-                await Task.Delay(2000);
+                await Task.Delay(3500);
                 StatusDetailsText.Foreground = (Brush)Application.Current.Resources["whiteText"];
                 StatusDetailsText.Text = "Ready...";
             } catch (Exception ex){
