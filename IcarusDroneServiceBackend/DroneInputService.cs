@@ -38,7 +38,6 @@
         //  The `GetCostInput` function parses a string input as a double and calculates a cost based on priority.
         //  It uses the `CostCalculator` class to determine the cost, returning the result or -1 if an error occurs,
         //  and optionally provides an error message.
-
         public double GetCostInput(string text, bool priority, out string? message) {
             CostCalculator calculator = new CostCalculator();
             double returnValue = 0;
