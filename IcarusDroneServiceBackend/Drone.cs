@@ -36,7 +36,11 @@
         //  Given that data binding is used, this method feels irrelevent, and is only here to
         //  meet the programming specs outlined in assessment doc.
         public string DisplayDetails (){
-            return $"Client: {clientName}\t\t\tService Cost: {serviceCost:C}";
+            try {
+                return $"Client: {clientName}\t\t\tService Cost: {serviceCost:C}";
+            } catch (Exception ex) {
+                return ex.Message;
+            }
         }
     }
 }

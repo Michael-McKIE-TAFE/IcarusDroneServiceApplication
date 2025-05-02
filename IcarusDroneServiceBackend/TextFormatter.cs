@@ -12,12 +12,18 @@
         //  If the input string is null or empty, it returns the string as is. Otherwise,
         //  it returns the input with the first letter in uppercase and the remaining
         //  letters in lowercase.
-        public string FormatSentenceCase (string input){
-            if (string.IsNullOrEmpty(input)){
-                return input;
-            }
+        public string FormatSentenceCase (string input, out string? message){
+            message = null;
 
-            return char.ToUpper(input[0]) + input.Substring(1).ToLower();
+            try {
+                if (string.IsNullOrEmpty(input)){
+                    return input;
+                }
+
+                return char.ToUpper(input[0]) + input.Substring(1).ToLower();
+            } catch (Exception ex){
+                return ex.Message;
+            }
         }
 
         //  The `FormatTitleCase` method takes a string input and converts it to title case,
@@ -26,18 +32,24 @@
         //  and then capitalizes the first letter of each word. Finally, it joins the words back
         //  together with spaces in between. If the input is null or empty, it simply returns the
         //  input as is.
-        public string FormatTitleCase(string input){
-            if (string.IsNullOrEmpty(input)){
-                return input;
+        public string FormatTitleCase(string input, out string? message){
+            message = null;
+
+            try {
+                if (string.IsNullOrEmpty(input)){
+                    return input;
+                }
+
+                var words = input.ToLower().Split(' ');
+
+                for (int i = 0; i < words.Length; i++){
+                    words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
+                }
+
+                return string.Join(" ", words);
+            } catch (Exception ex){
+                return ex.Message;
             }
-
-            var words = input.ToLower().Split(' ');
-
-            for (int i = 0; i < words.Length; i++){
-                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1);
-            }
-
-            return string.Join(" ", words);
         }
     }
 }

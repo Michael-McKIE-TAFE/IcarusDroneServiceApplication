@@ -1,5 +1,11 @@
 Icarus Drone Application Change Log:
 
+02/05/2025
+	-	Improved error handling.
+	-	Added functionality to return the exception message details to the WPF application
+		from the backend class library.
+
+
 30/04/2025
 	-	DroneInputService.cs
 			-	Removed an unneccessary reference to the cost calculator class.

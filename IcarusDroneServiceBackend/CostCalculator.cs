@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Drawing;
-
-namespace IcarusDroneServiceBackend {
+﻿namespace IcarusDroneServiceBackend {
         /// <summary>
         /// This class contains a method called `CalculateCost`, which calculates a cost based
         /// on an input value and a surcharge flag. It first calculates an increase amount, which
@@ -13,13 +10,20 @@ namespace IcarusDroneServiceBackend {
         //  This method calculates the cost by adding a 15% surcharge if the
         //  `applySurcharge` flag is `true`, or returns the original value if
         //  the flag is `false`.
-        public double CalculateCost (double value, bool applySurcharge){
-            double increaseAmount = value * 0.15;
+        public double CalculateCost (double value, bool applySurcharge, out string? exception){
+            exception = null;
 
-            if (applySurcharge){         
-                return value + increaseAmount;
-            } else {
-                return value;
+            try {
+                double increaseAmount = value * 0.15;
+
+                if (applySurcharge){
+                    return value + increaseAmount;
+                } else {
+                    return value;
+                }
+            } catch (Exception ex){
+                exception = ex.Message;
+                return -1;
             }
         }
     }

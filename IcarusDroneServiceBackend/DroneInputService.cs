@@ -17,32 +17,55 @@
         //  It calculates the final service cost using the CostCalculator, registers the drone with the
         //  DroneServiceManager, and returns a boolean indicating success. If validation fails, an appropriate
         //  error message is provided.
-        public bool TryRegisterDrone(string name, string model, string problem, double costInput, int tagNumber, bool isExpress, out string errorMessage){
-            errorMessage = string.Empty;
+        public bool TryRegisterDrone(string name, string model, string problem, double costInput, int tagNumber, bool isExpress, out string? errorMessage){
+            errorMessage = null;
 
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(problem) || double.IsNaN(costInput)){
-                errorMessage = "Please fill out all fields.";
+            try {
+                if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(model) || string.IsNullOrWhiteSpace(problem) || double.IsNaN(costInput)){
+                    errorMessage = "Please fill out all fields.";
+                    return false;
+                }
+
+                _dsManager.RegisterDrone(name.Trim(), model.Trim(), problem.Trim(), costInput, tagNumber, isExpress, out errorMessage);
+
+                return true;
+            } catch (Exception ex){
+                errorMessage = ex.Message;
                 return false;
             }
-
-            _dsManager.RegisterDrone(name.Trim(), model.Trim(), problem.Trim(), costInput, tagNumber, isExpress);
-            return true;
         }
 
-        public double GetCostInput(string text, bool priority){
+        public double GetCostInput(string text, bool priority, out string? message) {
             CostCalculator calculator = new CostCalculator();
             double returnValue = 0;
+            string? error = null;
+            message = null;
 
-            if (double.TryParse(text, out double value)){
-                if (priority){
-                    returnValue = Math.Round(calculator.CalculateCost(value, true), 2);
-                } else {
-                    returnValue = Math.Round(calculator.CalculateCost(value, false), 2);
+            try {
+                if (double.TryParse(text, out double value)) {
+                    if (priority) {
+                        double tempValue = Math.Round(calculator.CalculateCost(value, true, out error), 2);
+
+                        if (error != null) {
+                            returnValue = -1;
+                        } else {
+                            returnValue = tempValue;
+                        }
+                    } else {
+                        double tempValue = Math.Round(calculator.CalculateCost(value, false, out error), 2);
+
+                        if (error != null) {
+                            returnValue = -1;
+                        } else {
+                            returnValue = tempValue;
+                        }
+                    }
                 }
 
                 return returnValue;
-            } else {
-                return -1;
+            } catch (Exception ex){
+                message = error + ex.Message;
+                return returnValue;
             }
         }
     }
