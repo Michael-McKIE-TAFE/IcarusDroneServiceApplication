@@ -28,7 +28,6 @@
             try {
                 string? eMessage = null;
                 var formattedClient = _textFormatter.FormatTitleCase(clientName, out eMessage);
-                
 
                 if (eMessage != null){
                     message = eMessage;

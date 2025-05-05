@@ -1,5 +1,16 @@
 Icarus Drone Application Change Log:
 
+05/05/2025 - Attempted to bring the application more inline with the SOLID principles
+	-	Moved logic from MainWindow.xaml.cs to DroneInputService.cs.
+	-	Added the DroneValidator.cs class to handle validation logic.
+	-	Added the CostCalculatorService.cs Class to abstract cost calculations.
+	-	Added interfaces for both new classes in an attempt to better apply the OCP principle.
+	-	DroneInputService.cs
+			-	Removed method for cost validation.
+	-	Removed the CostCalculator.cs Class, as it was made redundent by the use of interfaces.
+			- In hindsight should have extended this class instead of creating CostCalculatorService.cs.
+
+
 02/05/2025
 	-	Improved error handling.
 	-	Added functionality to return the exception message details to the WPF application

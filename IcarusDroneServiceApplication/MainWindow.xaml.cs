@@ -17,7 +17,7 @@ namespace IcarusDroneServiceApplication {
     /// </summary>
     public partial class MainWindow : Window {
         private DroneServiceManager dsManager;
-        private ObservableCollection<Drone> finishedDrones;
+        private ObservableCollection<Drone>? finishedDrones;
         private DroneInputService inputService;
 
         //  Initializes the `MainWindow` by setting up the `DroneServiceManager` and `DroneInputService` instances,
@@ -25,16 +25,24 @@ namespace IcarusDroneServiceApplication {
         //  the `FinishedWorkList` to this collection to display the completed drone services in the UI.
         public MainWindow (){
             InitializeComponent();
+
             string? message = null;
             dsManager = new DroneServiceManager();
-            inputService = new DroneInputService(dsManager);    
-            finishedDrones = new ObservableCollection<Drone>(dsManager.GetFinishedList(out message));
+            var validator = new DroneValidator();
+            var costCalculatorService = new CostCalculatorService();
+            inputService = new DroneInputService(validator, costCalculatorService, dsManager);
 
-            if (message != null){
-                SetStatusDetails("We encountered a problem. Details: " + message, false);
-            } else {
-                FinishedWorkList.ItemsSource = finishedDrones;
-            }
+            Task.Run(() => {
+                finishedDrones = new ObservableCollection<Drone>(dsManager.GetFinishedList(out message));
+
+                Dispatcher.Invoke(() => {
+                    if (message != null){
+                        SetStatusDetails("We encountered a problem. Details: " + message, false);
+                    } else {
+                        FinishedWorkList.ItemsSource = finishedDrones;
+                    }
+                });
+            });
         }
 
         //  This method handles the `GotFocus` event for a `TextBox`, clearing its content when it gains focus.
@@ -102,11 +110,7 @@ namespace IcarusDroneServiceApplication {
                 string problem = ProblemField.Text.Trim();
                 int tagNumber = (TagNumber.Value ?? 0);
                 bool isExpress = ExpressSelected.IsChecked == true;
-                double amount = inputService.GetCostInput(ServiceCostTextBox.Text, isExpress, out error);
-
-                if (error != null || amount == -1){
-                    SetStatusDetails("We encountered a problem. Details: " + error, false);
-                }
+                string amount = ServiceCostTextBox.Text.Trim();
 
                 if (inputService.TryRegisterDrone(name, model, problem, amount, tagNumber, isExpress, out error)){ 
                     AdvanceServiceTag(TagNumber);
@@ -222,7 +226,6 @@ namespace IcarusDroneServiceApplication {
                         selectedItem.DisplayServiceProblem,
                         selectedItem.DisplayServiceCost.ToString(),
                         selectedItem.DisplayServiceTag.ToString());
-
 
                     detailWindow.Owner = this;
                     detailWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
@@ -393,9 +396,11 @@ namespace IcarusDroneServiceApplication {
                     if (message != null){
                         SetStatusDetails("Encountered an unexpected problem. Details: " + message, false);
                     } else {
-                        finishedDrones.Remove(selectedItem);
-                        DisplayFinishedList();
-                        SetStatusDetails("Successfully Deleted the Drone from the Completed Work List.", true);
+                        if (finishedDrones != null){
+                            finishedDrones.Remove(selectedItem);
+                            DisplayFinishedList();
+                            SetStatusDetails("Successfully Deleted the Drone from the Completed Work List.", true);
+                        }
                     }
                 }
             } catch (Exception ex){
