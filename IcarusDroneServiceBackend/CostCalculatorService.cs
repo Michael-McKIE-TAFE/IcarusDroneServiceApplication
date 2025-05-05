@@ -33,15 +33,20 @@
         public double CalculateCost(string costInput, bool isExpress, out string? errorMessage){
             errorMessage = null;
 
-            if (!double.TryParse(costInput, out double value)){
-                errorMessage = "Invalid cost input.";
+            try {
+                if (!double.TryParse(costInput, out double value)){
+                    errorMessage = "Invalid cost input.";
+                    return -1;
+                }
+
+                ICostAdjustment costAdjustment = isExpress ? new SurchargeAdjustment() : new NoAdjustment();
+                double cost = costAdjustment.ApplyAdjustment(value, out errorMessage);
+
+                return errorMessage == null ? Math.Round(cost, 2) : -1;
+            } catch (Exception ex){
+                errorMessage = ex.Message;
                 return -1;
             }
-
-            ICostAdjustment costAdjustment = isExpress ? new SurchargeAdjustment() : new NoAdjustment();
-            double cost = costAdjustment.ApplyAdjustment(value, out errorMessage);
-
-            return errorMessage == null ? Math.Round(cost, 2) : -1;
         }
     }
 }
