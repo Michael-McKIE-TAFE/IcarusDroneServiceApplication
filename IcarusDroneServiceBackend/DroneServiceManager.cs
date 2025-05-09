@@ -88,7 +88,8 @@
             }
         }
 
-        //  Returns the finished work list
+        //  Returns the list of finished drones. If the list is null or an exception occurs,
+        //  returns an empty list and sets an error message.
         public List<Drone> GetFinishedList (out string? message){
             message = null;
 
@@ -122,7 +123,8 @@
             }
         }
 
-        //  Returns the regular service queue.
+        //  Returns the queue of drones for regular service. If the queue is null or an exception occurs,
+        //  returns an empty queue and sets an error message.
         public Queue<Drone> GetRegularQueue (out string? message){
             message = null;
             try {

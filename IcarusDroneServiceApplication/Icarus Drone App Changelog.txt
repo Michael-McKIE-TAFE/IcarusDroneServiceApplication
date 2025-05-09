@@ -1,5 +1,9 @@
 Icarus Drone Application Change Log:
 
+09/05/2025
+	-	Added missing code comments.
+
+
 05/05/2025 - Attempted to bring the application more inline with the SOLID principles
 	-	Moved logic from MainWindow.xaml.cs to DroneInputService.cs.
 	-	Added the DroneValidator.cs class to handle validation logic.

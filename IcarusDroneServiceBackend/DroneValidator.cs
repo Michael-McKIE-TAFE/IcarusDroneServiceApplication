@@ -1,5 +1,7 @@
 ﻿namespace IcarusDroneServiceBackend {
     public class DroneValidator : IDroneValidator {
+        // Validates that all input fields are filled.
+        // Returns false and sets an error message if any are empty or an exception occurs.
         public bool ValidateInput(string name, string model, string problem, string costInput, out string? errorMessage){
             errorMessage = null;
 
