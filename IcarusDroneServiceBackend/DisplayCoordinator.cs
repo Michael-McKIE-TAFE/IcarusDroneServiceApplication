@@ -1,5 +1,7 @@
 ﻿namespace IcarusDroneServiceBackend {
     //  Programming Requirements: 6.18
+    //  This class is the entry point for the Class Library that is used
+    //  as the backend for the application.
     public class DisplayCoordinator {
         private const double surchargeAmount = 0.15;
         //  Programming Requirements: 6.2
@@ -8,43 +10,6 @@
         private readonly Queue<Drone>? regularService = new();
         //  Programming Requirements: 6.4
         private readonly Queue<Drone>? expressService = new();
-        
-        //  This method attempts to register a drone based on the passed parammeters.
-        public bool TryRegisterDrone (string name, string model, string problem, string costInput, int tagNumber, bool isExpress){
-            try {
-                TextFormatter textFormatter = new();
-                string formattedClient = textFormatter.FormatTitle(name);
-                string formattedProblem = textFormatter.FormatSentence(problem);
-                double cost = ReturnCost(costInput, isExpress);
-
-                if (cost == -1){
-                    return false;
-                }
-
-                bool success = AddDrone(formattedClient, model, formattedProblem, cost, tagNumber, isExpress);
-
-                return success;
-            } catch { 
-                return false;    
-            }
-        }
-
-        //  This method creates a drone object and adds it to either the reguar or express queue.
-        private bool AddDrone (string name, string model, string problem, double cost, int tag, bool express){
-            try {
-                Drone drone = new(name, model, problem, cost, tag);
-
-                if (express){
-                    expressService?.Enqueue(drone);
-                } else {
-                    regularService?.Enqueue(drone);
-                }
-
-                return true;
-            } catch { 
-                return false;    
-            }
-        }
 
         //  Programming Requirements: 6.6
         //  Method was made static to fix "CA1822: Member does not access instance data and can be marked static"
@@ -59,6 +24,43 @@
             }
             
             return Math.Round(cost, 2);
+        }
+
+        //  Programming Requirements: 6.8
+        //  This method returns the regular service queue as a queue of Tuples.
+        //  This was done to remove all references of Drone from the WPF applicarion.
+        //  Tuple breakdown: Item1 = Name, Item2 = Model, Item3 = Problem, Item4 = Cost, Item5 = Tag.
+        public Queue<(string, string, string, double, int)> ReturnRegularQueue (){
+            var queue = new Queue<(string, string, string, double, int)>();
+
+            if (regularService != null){
+                foreach (var drone in regularService){
+                    var droneTuple = (drone.ClientName, drone.DroneModel, drone.ServiceProblem, drone.ServiceCost, drone.ServiceTag);
+                    queue.Enqueue(droneTuple);
+                }
+                return queue;
+            }
+
+            return queue;
+        }
+
+        //  Programming Requirements: 6.9
+        //  This method returns the express service queue as a queue of Tuples.
+        //  This was done to remove all references of Drone from the WPF applicarion.
+        //  Tuple breakdown: Item1 = Name, Item2 = Model, Item3 = Problem, Item4 = Cost, Item5 = Tag.
+        public Queue<(string, string, string, double, int)> ReturnExpressQueue (){
+            var queue = new Queue<(string, string, string, double, int)>();
+
+            if (expressService != null){
+                foreach (var drone in expressService){
+                    var droneTuple = (drone.ClientName, drone.DroneModel, drone.ServiceProblem, drone.ServiceCost, drone.ServiceTag);
+                    queue.Enqueue(droneTuple);
+                }
+
+                return queue;
+            }
+
+            return queue;
         }
 
         //  Programmign Requirements: 6.14 & 6.15
@@ -92,7 +94,46 @@
             return false;
         }
 
-        //  This method returns the finished work list.
+        //  This method attempts to register a new drone based on the passed parammeters,
+        //  formats the clients name into a title and the problem into sentence format.
+        public bool TryRegisterDrone (string name, string model, string problem, string costInput, int tagNumber, bool isExpress){
+            try {
+                TextFormatter textFormatter = new();
+                string formattedClient = TextFormatter.FormatTitle(name);
+                string formattedProblem = TextFormatter.FormatSentence(problem);
+                double cost = ReturnCost(costInput, isExpress);
+
+                if (cost == -1){
+                    return false;
+                }
+
+                bool success = AddDrone(formattedClient, model, formattedProblem, cost, tagNumber, isExpress);
+
+                return success;
+            } catch { 
+                return false;    
+            }
+        }
+
+        //  This method creates a drone object and adds it to either the reguar or express queue.
+        private bool AddDrone (string name, string model, string problem, double cost, int tag, bool express){
+            try {
+                Drone drone = new(name, model, problem, cost, tag);
+
+                if (express){
+                    expressService?.Enqueue(drone);
+                } else {
+                    regularService?.Enqueue(drone);
+                }
+
+                return true;
+            } catch { 
+                return false;    
+            }
+        }
+
+        //  This method returns the finished work list as a Tuple, it was done this way to avoid
+        //  having any reference to the Drone class on the front end.
         public List<(string, string, string, double, int)> ReturnFinishedList(){
             var list = new List<(string, string, string, double, int)>();
             
@@ -105,43 +146,6 @@
             }
             
             return list;
-        }
-
-        //  Programming Requirements: 6.9
-        //  This method returns the express service queue as a queue of Tuples.
-        //  This was done to remove all references of Drone from the WPF applicarion.
-        //  Tuple breakdown: Item1 = Name, Item2 = Model, Item3 = Problem, Item4 = Cost, Item5 = Tag.
-        public Queue<(string, string, string, double, int)> ReturnExpressQueue (){
-            var queue = new Queue<(string, string, string, double, int)>();
-
-            if (expressService != null){
-                foreach (var drone in expressService){
-                    var droneTuple = (drone.ClientName, drone.DroneModel, drone.ServiceProblem, drone.ServiceCost, drone.ServiceTag);
-                    queue.Enqueue(droneTuple);
-                }
-
-                return queue;
-            }
-
-            return queue;
-        }
-
-        //  Programming Requirements: 6.8
-        //  This method returns the regular service queue as a queue of Tuples.
-        //  This was done to remove all references of Drone from the WPF applicarion.
-        //  Tuple breakdown: Item1 = Name, Item2 = Model, Item3 = Problem, Item4 = Cost, Item5 = Tag.
-        public Queue<(string, string, string, double, int)> ReturnRegularQueue (){
-            var queue = new Queue<(string, string, string, double, int)>();
-
-            if (regularService != null){
-                foreach (var drone in regularService){
-                    var droneTuple = (drone.ClientName, drone.DroneModel, drone.ServiceProblem, drone.ServiceCost, drone.ServiceTag);
-                    queue.Enqueue(droneTuple);
-                }
-                return queue;
-            }
-
-            return queue;
         }
     }
 }
