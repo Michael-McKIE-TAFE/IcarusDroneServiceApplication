@@ -1,5 +1,20 @@
 Icarus Drone Application Change Log:
 
+03/06/2025 - Completed code refactoring
+	-	Deleted unneccessary classes.
+
+02/06/2025 - Continued code refactoring
+	+	Fixed data binding issue in the WPF application.
+	+	Modified MainWindow.xaml to help improve application readability.
+	-	Removed all references to the Drone class from the WPF application.
+	+	Reduced code duplication by merging 2x 20 line methods (40 combined lines) into 1x 24 line method.
+
+
+01/06/2025 - Started total project refactoring
+	+	Modified main window layout and colour palette.
+	+	Reduced backend bloat and simplified code (-179 lines of code).
+
+
 05/05/2025 - Attempted to bring the application more inline with the SOLID principles
 	-	Moved logic from MainWindow.xaml.cs to DroneInputService.cs.
 	-	Added the DroneValidator.cs class to handle validation logic.

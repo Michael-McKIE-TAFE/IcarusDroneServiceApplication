@@ -8,58 +8,82 @@
         Title="Service Details" Height="275" Width="400"
         WindowStyle="None" Background="Transparent"
         AllowsTransparency="True">
-    <Border Background="{StaticResource darkGrey}" CornerRadius="8"
-            BorderThickness="1"
-            BorderBrush="{StaticResource greenText}">
-        <Grid>
-            <StackPanel Margin="10">
-                <TextBlock Text="Service Tag:" FontWeight="Bold"
-                           Foreground="{StaticResource whiteText}"/>
+    <Border Background="{StaticResource BackgroundThree}" BorderBrush="{StaticResource Crimson}"
+        BorderThickness="2" CornerRadius="12">
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <TextBox Name="ServiceTagTextBox" IsReadOnly="True" Margin="5"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{StaticResource whiteText}"/>
+            <TextBlock Text="Customer Information" Margin="5" FontSize="18"
+                   Foreground="{StaticResource Platinum}"
+                   Grid.Row="0"/>
 
-                <!--    Customer Details Section    -->
-                <TextBlock Text="Client Name:" FontWeight="Bold"
-                           Foreground="{StaticResource whiteText}"/>
-                
-                <TextBox Name="ClientNameTextBox" IsReadOnly="True" Margin="5"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{StaticResource whiteText}"/>
+            <Border Background="{StaticResource PanelTwo}" CornerRadius="12"
+                Margin="5,35,5,5" Grid.Row="1">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <!--    Drone Details Section   -->
-                <TextBlock Text="Drone Model:" FontWeight="Bold"
-                           Foreground="{StaticResource whiteText}"/>
-                
-                <TextBox Name="DroneModelTextBox" IsReadOnly="True" Margin="5"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{StaticResource whiteText}"/>
+                    <StackPanel Orientation="Vertical" Margin="5" Grid.Column="0">
+                        <!--    Service Tag Details -->
+                        <TextBlock Text="Service Tag:" FontWeight="Bold"
+                               Foreground="{StaticResource Platinum}"/>
 
-                <!--    Problem Description Section     -->
-                <TextBlock Text="Problem Description:" FontWeight="Bold"
-                           Foreground="{StaticResource whiteText}"/>
-                
-                <TextBox Name="ServiceProblemTextBox" IsReadOnly="True" Margin="5"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{StaticResource whiteText}"/>
+                        <TextBox Name="ServiceTagTextBox" IsReadOnly="True" Margin="5"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{StaticResource Platinum}"/>
 
-                <!--    Service Cost Section    -->
-                <TextBlock Text="Service Cost:" FontWeight="Bold"
-                           Foreground="{StaticResource whiteText}"/>
-                
-                <TextBox Name="ServiceCostTextBox" IsReadOnly="True" Margin="5"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{StaticResource whiteText}"/>
+                        <!--    Name Details    -->
+                        <TextBlock Text="Client Name:" FontWeight="Bold"
+                               Foreground="{StaticResource Platinum}"/>
 
-                <!--    Close Button Section    -->
-                <Button Content="Close" Width="100" HorizontalAlignment="Center" Margin="10" Click="CloseButton_Click"/>
-            </StackPanel>
+                        <TextBox Name="ClientNameTextBox" IsReadOnly="True" Margin="5"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{StaticResource Platinum}"/>
+
+                        <!--    Model Section   -->
+                        <TextBlock Text="Drone Model:" FontWeight="Bold"
+                               Foreground="{StaticResource Platinum}"/>
+
+                        <TextBox Name="DroneModelTextBox" IsReadOnly="True" Margin="5"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{StaticResource Platinum}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="5" Grid.Column="1">
+                        <!--    Problem Details -->
+                        <TextBlock Text="Problem Description:" FontWeight="Bold"
+                               Foreground="{StaticResource Platinum}"/>
+
+                        <TextBox Name="ServiceProblemTextBox" IsReadOnly="True" Margin="5"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{StaticResource Platinum}"/>
+
+                        <!--    Cost Details -->
+                        <TextBlock Text="Service Cost:" FontWeight="Bold"
+                               Foreground="{StaticResource Platinum}"/>
+
+                        <TextBox Name="ServiceCostTextBox" IsReadOnly="True" Margin="5"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{StaticResource Platinum}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--    Close Button    -->
+            <Button Content="Close" Width="100" HorizontalAlignment="Center" 
+                Margin="10" Click="CloseButton_Click" Grid.Row="2"
+                Background="{StaticResource Amber}"/>
         </Grid>
     </Border>
 </Window>

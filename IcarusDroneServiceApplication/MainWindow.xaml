@@ -6,212 +6,296 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IcarusDroneServiceApplication"
         mc:Ignorable="d"
-        Title="Icarus Drone Service Application" Height="720" Width="1280">
-    <Grid Background="{StaticResource darkGrey}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        Title="Icarus Drone Service Application" Height="768" Width="1360"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
 
-        <!--    Header      -->
-        <TextBlock Text="Icarus Drone Service Application" 
-                   FontSize="28" Margin="5"
-                   HorizontalAlignment="Center"
-                   Foreground="AliceBlue"
-                   Grid.Row="0"/>
+    <Border BorderThickness="2" CornerRadius="12">
+        <!--    Creates a gradient border around the window     -->
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#CA0000" Offset="1" />
+                <GradientStop Color="#FF7900" Offset="0.5" />
+                <GradientStop Color="#FFB700" Offset="0" />
+            </LinearGradientBrush>
+        </Border.BorderBrush>
 
-        <!--    Footer      -->
-        <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal">
-            <TextBlock Text="Status: " FontSize="18" Foreground="AliceBlue"/>
+        <!--    Creates a gradient background       -->
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="#181F39" Offset="0" />
+                <GradientStop Color="#111525" Offset="1" />
+            </LinearGradientBrush>
+        </Border.Background>
 
-            <!--    Used for displaying Status messages     -->
-            <TextBlock FontSize="14" Foreground="AliceBlue"
-                       VerticalAlignment="Bottom"
-                       Margin="10,0,0,0" Text="Ready..."
-                       x:Name="StatusDetailsText"/>
-        </StackPanel>
+        <!--    Window Layout       -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <!--    Main Area       -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.33*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Orientation="Vertical" Margin="5" Grid.Column="0">
-                <!--    Customer Details Panel      -->
-                <StackPanel Orientation="Vertical" Background="{StaticResource lightGrey}">
-                    <TextBlock Text="Customer Details" FontSize="22" Margin="5" Foreground="AliceBlue"/>
-
-                    <!--    Name Stuff  -->
-                    <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
-                        <TextBlock Text="Client Name:" FontSize="16" Foreground="AliceBlue" Width="130"/>
-
-                        <TextBox Text="Name" Width="130" FontSize="16" Margin="10,0,0,0"
-                                 x:Name="NameField" GotFocus="TextBox_GotFocus"/>
-                    </StackPanel>
-
-                    <!--    Drone Stuff     -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Drone Details:" FontSize="16" Foreground="AliceBlue"
-                                   Width="130"/>
-
-                        <TextBox Text="Details" Width="130" FontSize="16" Margin="10,0,0,0"
-                                 x:Name="DetailsField" GotFocus="TextBox_GotFocus"/>
-                    </StackPanel>
-
-                    <!--    Problem Description     -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Problem Details:" FontSize="16" Foreground="AliceBlue"
-                                   Width="130"/>
-
-                        <TextBox Text="Problem" Width="130" FontSize="16" Margin="10,0,0,0"
-                                 x:Name="ProblemField" GotFocus="TextBox_GotFocus"
-                                 TextWrapping="Wrap" AcceptsReturn="True"
-                                 AcceptsTab="True" SpellCheck.IsEnabled="True"/>
-                    </StackPanel>
-
-                    <!--    Service Cost    -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Service Cost ($):" FontSize="16"
-                                   Foreground="AliceBlue" Width="130"/>
-
-                        <TextBox Text="Cost" Width="130" FontSize="16" Margin="10,0,0,0"
-                                 x:Name="ServiceCostTextBox" GotFocus="TextBox_GotFocus"
-                                 PreviewTextInput="ServiceCostTextBox_PreviewTextInput"/>
-                    </StackPanel>
-
-                    <!--    Service Tag     -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Service Tag:" FontSize="16" Foreground="AliceBlue"
-                                   Width="130"/>
-
-                        <xctk:IntegerUpDown x:Name="TagNumber" Minimum="100"
-                                            Maximum="900" Increment="10"
-                                            Value="100" FontSize="16"
-                                            Width="130" Margin="10,0,0,0"/>
-                    </StackPanel>
-
-                    <!--Priority Type   -->
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Service Priority:" FontSize="16"
-                                   Foreground="AliceBlue" Width="115"/>
-
-                        <RadioButton Content="Regular" FontSize="16"
-                                     Foreground="AliceBlue" x:Name="RegularSelected"/>
-
-                        <RadioButton Content="Express" FontSize="16" Foreground="AliceBlue"
-                                     Margin="10,0,0,0" x:Name="ExpressSelected"/>
-                    </StackPanel>
-
-                    <!--    Sumission Button    -->
-                    <Button Content="Submit" FontSize="16" Width="150" Margin="0,10,0,0" Click="AddNewItem_Click"/>
-
-                    <TextBlock Text="Note: A 15% surcharge applies to all express services. This will be calculated automatically when the express service is chosen."
-                               FontSize="12" Foreground="AliceBlue" Margin="5,10,5,5" TextWrapping="Wrap"/>
-                </StackPanel>
-
-                <!--    Completed Work Panel        -->
-                <StackPanel Orientation="Vertical" Margin="0,10,0,0" Background="{StaticResource lightGrey}">
-                    <TextBlock Text="Completed Services:" Foreground="AliceBlue"
-                               FontSize="22" Margin="5"/>
-
-                    <Grid Margin="5,5,5,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Client" FontWeight="Bold"
-                                   Foreground="{StaticResource whiteText}"/>
-                        <TextBlock Grid.Column="1" Text="Cost" FontWeight="Bold" 
-                                   Foreground="{StaticResource whiteText}"/>
-                    </Grid>
-                    
-                    <!--    List box for displaying the completed jobs  -->
-                    <ListBox Margin="5" Width="Auto" x:Name="FinishedWorkList"
-                             MouseDoubleClick="FinishedWorkList_MouseDoubleClick">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="80"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Grid.Column="0" Text="{Binding DisplayClientName}" />
-                                    <TextBlock Grid.Column="1" Text="{Binding DisplayServiceCost}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <Button Content="Finalise" FontSize="16" Margin="5" Width="150" 
-                            Click="FinaliseButton_Click"/>
-                </StackPanel>
-            </StackPanel>
-
-            <!--    Main Body Area      -->
-            <Grid Background="{StaticResource midGrey}" Grid.Column="1" Margin="5">
+            <!--    Window Controls & App Title     -->
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="5"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                <!--    Application Title       -->
+                <TextBlock Text="Icarus Drone Repairs" Grid.Column="0"
+                           FontSize="24" Foreground="{StaticResource Platinum}"
+                           Margin="10,5,5,5" VerticalAlignment="Center" />
 
-                <!--    Section Header      -->
-                <TextBlock Text="Service Queues" FontSize="22" Margin="5" Foreground="AliceBlue"
-                           Grid.Column="0" Grid.Row="0"/>
+                <!--    Minimise Window Button     -->
+                <Button x:Name="btnMinimise" Background="{StaticResource Amber}"
+                        BorderThickness="0" Foreground="{StaticResource BackgroundOne}"
+                        FontSize="16" Content="-" Cursor="Hand" Grid.Column="1"
+                        Click="btnMinimise_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="20" Height="20" CornerRadius="10"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-                <!--    Express Service Queue Stuff     -->
-                <StackPanel Orientation="Vertical" Margin="5" Background="{StaticResource lightGrey}"
-                            Grid.Column="0" Grid.Row="1">
-                    <TextBlock Text="Express" FontSize="20" Foreground="AliceBlue"
-                               Margin="5"/>
-
-                    <ListView Name="ExpressServiceList" Margin="5" Width="Auto"
-                              SelectionChanged="ExpressServiceList_SelectionChanged">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding DisplayServiceTag}" Width="60"/>
-                                <GridViewColumn Header="Client" DisplayMemberBinding="{Binding DisplayClientName}" Width="100"/>
-                                <GridViewColumn Header="Model" DisplayMemberBinding="{Binding DisplayDroneModel}" Width="100"/>
-                                <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding DisplayServiceProblem}" Width="150"/>
-                                <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding DisplayServiceCost}" Width="80"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-
-                    <Button Content="Remove from queue" FontSize="16" Width="150" Margin="5"
-                            Click="DequeueExpress_Click"/>
-                </StackPanel>
-
-                <!--    Regular Service Queue Stuff     -->
-                <StackPanel Orientation="Vertical" Margin="5" Background="{StaticResource lightGrey}"
-                            Grid.Column="1" Grid.Row="1">
-                    <TextBlock Text="Regular" FontSize="20" Foreground="AliceBlue" Margin="5"/>
-
-                    <ListView Name="RegularServiceList" Margin="5" Width="Auto"
-                              SelectionChanged="RegularServiceList_SelectionChanged">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding DisplayServiceTag}" Width="60"/>
-                                <GridViewColumn Header="Client" DisplayMemberBinding="{Binding DisplayClientName}" Width="100"/>
-                                <GridViewColumn Header="Model" DisplayMemberBinding="{Binding DisplayDroneModel}" Width="100"/>
-                                <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding DisplayServiceProblem}" Width="150"/>
-                                <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding DisplayServiceCost}" Width="80"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-
-                    <Button Content="Remove from queue" FontSize="16" Width="150" Margin="5"
-                            Click="DequeueRegular_Click"/>
-                </StackPanel>
+                <!--    Close Window Button     -->
+                <Button x:Name="btnClose" Background="{StaticResource Crimson}"
+                        BorderThickness="0" Foreground="{StaticResource Platinum}"
+                        FontSize="12" Content="X" Cursor="Hand" Grid.Column="2"
+                        Click="btnClose_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="20" Height="20" CornerRadius="10"
+                                Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
+
+            <!--    Footer Content   -->
+            <Border Background="{StaticResource PanelTwo}" Margin="5" Grid.Row="2"
+                    CornerRadius="12">
+                <StackPanel Margin="5" Orientation="Horizontal">
+                    <TextBlock Text="Status: " FontSize="18" Foreground="{StaticResource Platinum}"
+                               Margin="10,5,0,5"/>
+
+                    <!--    Used for displaying Status messages     -->
+                    <TextBlock FontSize="14" Foreground="{StaticResource Platinum}"
+                               VerticalAlignment="Bottom"
+                               Margin="10,5,0,5" Text="Ready..."
+                               x:Name="StatusDetailsText"/>
+                </StackPanel>
+            </Border>
+
+            <!--    Main Window Content     -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.33*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--    Left Hand Side Content  -->
+                <StackPanel Orientation="Vertical" Margin="5" Grid.Column="0">
+                    <!--    Customer Details Panel      -->
+                    <Border Background="{StaticResource PanelTwo}" Margin="5" Grid.Column="0"
+                        CornerRadius="12">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Customer Details" FontSize="22" Margin="5" Foreground="{StaticResource Platinum}"/>
+
+                            <!--    Name Sub-Panel  -->
+                            <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+                                <TextBlock Text="Client Name:" FontSize="16" Foreground="{StaticResource Platinum}" 
+                                           Width="130"/>
+
+                                <TextBox Width="130" FontSize="16" Margin="10,0,0,0"
+                                         x:Name="NameField" GotFocus="TextBox_GotFocus"/>
+                            </StackPanel>
+
+                            <!--    Drone Details Sub-Panel     -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Drone Details:" FontSize="16" Foreground="{StaticResource Platinum}"
+                                           Width="130"/>
+
+                                <TextBox Width="130" FontSize="16" Margin="10,0,0,0"
+                                         x:Name="DetailsField" GotFocus="TextBox_GotFocus"/>
+                            </StackPanel>
+
+                            <!--    Problem Description Sub-Panel     -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Problem Details:" FontSize="16" Foreground="{StaticResource Platinum}"
+                                           Width="130"/>
+
+                                <!--    Programming Requirements: GUI Feature 3.0       -->
+                                <TextBox Width="130" FontSize="16" Margin="10,0,0,0"
+                                         x:Name="ProblemField" GotFocus="TextBox_GotFocus"
+                                         TextWrapping="Wrap" AcceptsReturn="True"
+                                         AcceptsTab="True" SpellCheck.IsEnabled="True"/>
+                            </StackPanel>
+
+                            <!--    Service Cost Sub-Panel    -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Service Cost ($):" FontSize="16"
+                                           Foreground="{StaticResource Platinum}" Width="130"/>
+
+                                <TextBox Width="130" FontSize="16" Margin="10,0,0,0"
+                                         x:Name="ServiceCostTextBox" GotFocus="TextBox_GotFocus"
+                                         PreviewTextInput="ServiceCostTextBox_PreviewTextInput"/>
+                            </StackPanel>
+
+                            <!--    Service Tag Sub-Panel     -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Service Tag:" FontSize="16" 
+                                           Foreground="{StaticResource Platinum}"
+                                           Width="130"/>
+
+                                <!--    Programming Requirements: GUI Feature 1.0       -->
+                                <xctk:IntegerUpDown x:Name="TagNumber" Minimum="100"
+                                                    Maximum="900" Increment="10"
+                                                    Value="100" FontSize="16"
+                                                    Width="130" Margin="10,0,0,0"/>
+                            </StackPanel>
+
+                            <!--Priority Type   -->
+                            <!--    Programming Requirements: GUI Feature 2.0       -->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Service Priority:" FontSize="16" Width="115"
+                                           Foreground="{StaticResource Platinum}" />
+
+                                <RadioButton Content="Regular" FontSize="16"
+                                             Foreground="{StaticResource Platinum}" 
+                                             x:Name="RegularSelected"/>
+
+                                <RadioButton Content="Express" FontSize="16" 
+                                             Foreground="{StaticResource Platinum}"
+                                             Margin="10,0,0,0" x:Name="ExpressSelected"/>
+                            </StackPanel>
+
+                            <!--    Submission Button    -->
+                            <Button Content="Submit" FontSize="16" Width="150" Margin="0,10,0,0" 
+                                    Click="AddNewItem_Click" Background="{StaticResource Amber}"/>
+
+                            <TextBlock Text="Note: A 15% surcharge applies to all express services. This will be calculated automatically when the express service is chosen."
+                                       FontSize="12" Foreground="{StaticResource Platinum}" Margin="5,10,5,5" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border> <!--  End Customer Details Panel      -->
+
+                    <!--    Completed Work Panel        -->
+                    <Border Background="{StaticResource PanelTwo}" Margin="5,10,5,5" CornerRadius="12">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Completed Services:" Foreground="AliceBlue"
+                                       FontSize="22" Margin="5"/>
+
+                            <Grid Margin="5,5,5,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Client" FontWeight="Bold"
+                                           Foreground="{StaticResource Platinum}"/>
+                                <TextBlock Grid.Column="1" Text="Cost" FontWeight="Bold" 
+                                           Foreground="{StaticResource Platinum}"/>
+                            </Grid>
+
+                            <!--    List box for displaying the completed jobs      -->
+                            <!--    Programming Requirements: GUI Feature 5.0       -->
+                            <ListBox Margin="5" Width="Auto" x:Name="FinishedWorkList"
+                                     MouseDoubleClick="FinishedWorkList_MouseDoubleClick">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="80"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" Text="{Binding DisplayClientName}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding DisplayServiceCost}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Button Content="Finalise" FontSize="16" Margin="5" Width="150" 
+                                    Click="FinaliseButton_Click" Background="{StaticResource Amber}" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel> <!--  End Left Hand Side Content      -->
+
+                <!--    Start Queue Section     -->
+                <Grid Grid.Column="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--    Express Queue     -->
+                    <Border Grid.Column="0" Background="{StaticResource PanelTwo}" Margin="5"
+                            CornerRadius="12">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Express Service Queue" FontSize="22" Margin="5" 
+                                       Foreground="{StaticResource Platinum}"/>
+
+                            <!--    Programming Requirements: GUI Feature 4.0       -->
+                            <ListView Name="ExpressServiceList" Margin="5" Width="Auto"
+                                      SelectionChanged="ExpressServiceList_SelectionChanged">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding DisplayServiceTag}" Width="60"/>
+                                        <GridViewColumn Header="Client" DisplayMemberBinding="{Binding DisplayClientName}" Width="100"/>
+                                        <GridViewColumn Header="Model" DisplayMemberBinding="{Binding DisplayDroneModel}" Width="100"/>
+                                        <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding DisplayServiceProblem}" Width="150"/>
+                                        <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding DisplayServiceCost}" Width="80"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                            <Button Content="Remove from queue" FontSize="16" Width="150" Margin="5"
+                                Click="DequeueExpress_Click" Background="{StaticResource Amber}"/>
+                        </StackPanel>
+                    </Border> <!--    End Express Queue       -->
+
+                    <!--    Regular Queue       -->
+                    <Border Grid.Column="1" Margin="5" Background="{StaticResource PanelTwo}"
+                            CornerRadius="12">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Regular Service Queue" FontSize="22" 
+                                       Foreground="{StaticResource Platinum}" Margin="5"/>
+
+                            <!--    Programming Requirements: GUI Feature 4.0       -->
+                            <ListView Name="RegularServiceList" Margin="5" Width="Auto"
+                                      SelectionChanged="RegularServiceList_SelectionChanged">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding DisplayServiceTag}" Width="60"/>
+                                        <GridViewColumn Header="Client" DisplayMemberBinding="{Binding DisplayClientName}" Width="100"/>
+                                        <GridViewColumn Header="Model" DisplayMemberBinding="{Binding DisplayDroneModel}" Width="100"/>
+                                        <GridViewColumn Header="Problem" DisplayMemberBinding="{Binding DisplayServiceProblem}" Width="150"/>
+                                        <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding DisplayServiceCost}" Width="80"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                            <Button Content="Remove from queue" FontSize="16" Width="150" Margin="5"
+                                    Click="DequeueRegular_Click" Background="{StaticResource Amber}"/>
+                        </StackPanel>
+                    </Border> <!--  End Regular Queue       -->
+                </Grid> <!--    End Queue Section       -->
+            </Grid> <!--    End Main Window Content     -->
         </Grid>
-    </Grid>
+    </Border>
 </Window>

@@ -1,12 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--    Background Colours      -->
-    <SolidColorBrush x:Key="darkGrey">#282828</SolidColorBrush>
-    <SolidColorBrush x:Key="midGrey">#383838</SolidColorBrush>
-    <SolidColorBrush x:Key="lightGrey">#535353</SolidColorBrush>
+    <!--    Sample Palette One      -->
+    <SolidColorBrush x:Key="BackgroundOne">#181F39</SolidColorBrush>
+    <SolidColorBrush x:Key="PanelOne">#1E2746</SolidColorBrush>
+    <SolidColorBrush x:Key="BlueGrayOne">#2E3549</SolidColorBrush>
+    <SolidColorBrush x:Key="NavBarOne">#171D35</SolidColorBrush>
 
-    <!--    Text Colours        -->
-    <SolidColorBrush x:Key="whiteText">#F2F2F2</SolidColorBrush>
-    <SolidColorBrush x:Key="redText">#FF0070</SolidColorBrush>
-    <SolidColorBrush x:Key="greenText">#00A18F</SolidColorBrush>
+    <!--    Sample Palette Two      -->
+    <SolidColorBrush x:Key="BackgroundTwo">#1E2343</SolidColorBrush>
+    <SolidColorBrush x:Key="PanelTwo">#2F345A</SolidColorBrush>
+
+    <!--    Sample Palette Three    -->
+    <SolidColorBrush x:Key="BackgroundThree">#111525</SolidColorBrush>
+    <SolidColorBrush x:Key="PanelThree">#161C31</SolidColorBrush>
+    <SolidColorBrush x:Key="NavBarThree">#161B2E</SolidColorBrush>
+
+    <!--    Spot Colours        -->
+    <SolidColorBrush x:Key="Platinum">#E1E1E3</SolidColorBrush>
+    <SolidColorBrush x:Key="Crimson">#CA0000</SolidColorBrush>
+    <SolidColorBrush x:Key="Orange">#FF7900</SolidColorBrush>
+    <SolidColorBrush x:Key="Amber">#FFB700</SolidColorBrush>
+    <SolidColorBrush x:Key="ForestGreen">#4B7337</SolidColorBrush>
 </ResourceDictionary>
