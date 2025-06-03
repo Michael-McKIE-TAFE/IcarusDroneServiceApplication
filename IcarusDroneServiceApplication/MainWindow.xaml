@@ -58,7 +58,7 @@
                 <Button x:Name="btnMinimise" Background="{StaticResource Amber}"
                         BorderThickness="0" Foreground="{StaticResource BackgroundOne}"
                         FontSize="16" Content="-" Cursor="Hand" Grid.Column="1"
-                        Click="btnMinimise_Click">
+                        Click="BtnMinimise_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Width="20" Height="20" CornerRadius="10"
@@ -74,7 +74,7 @@
                 <Button x:Name="btnClose" Background="{StaticResource Crimson}"
                         BorderThickness="0" Foreground="{StaticResource Platinum}"
                         FontSize="12" Content="X" Cursor="Hand" Grid.Column="2"
-                        Click="btnClose_Click">
+                        Click="BtnClose_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Width="20" Height="20" CornerRadius="10"

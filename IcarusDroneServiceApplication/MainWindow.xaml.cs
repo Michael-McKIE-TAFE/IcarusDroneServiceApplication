@@ -1,10 +1,7 @@
-﻿using IcarusDroneServiceBackend;
-using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace IcarusDroneServiceApplication {
     //  Programming Requirements: 6.18
@@ -14,40 +11,6 @@ namespace IcarusDroneServiceApplication {
         public MainWindow (){
             InitializeComponent();
             coordinator = new LibraryCoordinator(RegularServiceList, ExpressServiceList, FinishedWorkList, StatusDetailsText, TagNumber);
-        }
-
-        //  This method allows the Window to be moved around the screen.
-        private void Window_MouseDown (object sender, MouseButtonEventArgs e){
-            if (e.LeftButton == MouseButtonState.Pressed){
-                DragMove();
-            }
-        }
-
-        //  This method minimises the Window when pressed.
-        private void btnMinimise_Click (object sender, RoutedEventArgs e){
-            WindowState = WindowState.Minimized;
-        }
-
-        //  This method Closes the Application when pressed.
-        private void btnClose_Click (object sender, RoutedEventArgs e){
-            Application.Current.Shutdown();
-        }
-
-        //  This method clears the contents of a TextBox when the user clicks into it.
-        private void TextBox_GotFocus (object sender, RoutedEventArgs e){
-            TextBox? textBox = sender as TextBox;
-
-            if (textBox != null){
-                textBox.Clear();
-            }
-        }
-
-        //  This method restricts the input of a TextBox to only allow for numbers to be entered.
-        private void ServiceCostTextBox_PreviewTextInput (object sender, TextCompositionEventArgs e){
-            if (sender is TextBox textBox){
-                var regex = new Regex(@"^\d*(\.\d{0,2})?$");
-                e.Handled = !regex.IsMatch(textBox.Text + e.Text);
-            }
         }
 
         //  Programming Requirements: 6.5
@@ -71,17 +34,6 @@ namespace IcarusDroneServiceApplication {
             }
         }
 
-        //  Programming Requirements: 6.17
-        //  This method clears the input fields once a record has been added.
-        private void ClearInputFields (){
-            NameField.Clear();
-            DetailsField.Clear();
-            ProblemField.Clear();
-            ServiceCostTextBox.Clear();
-            ExpressSelected.IsChecked = false;
-            RegularSelected.IsChecked = false;
-        }
-
         //  Programming Requirements: 6.7
         //  This method checks that the user has selected either the regular or express radio button,
         //  And returns true if either of them are, otherwise returns false.
@@ -91,6 +43,27 @@ namespace IcarusDroneServiceApplication {
             }
 
             return false;
+        }
+
+        //  Programming Requirements: 6.10
+        //  This method restricts the input of a TextBox to only allow for numbers to be entered.
+        private void ServiceCostTextBox_PreviewTextInput (object sender, TextCompositionEventArgs e){
+            if (sender is TextBox textBox){
+                var regex = new Regex(@"^\d*(\.\d{0,2})?$");
+                e.Handled = !regex.IsMatch(textBox.Text + e.Text);
+            }
+        }
+
+        //  Programming Requirements: 6.12
+        //  This method tells the LibraryCoordinator to display the details for the selected regular item.
+        private void RegularServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
+            coordinator.DisplayItemDetails(false);
+        }
+
+        //  Programming Requirements: 6.13
+        //  This method tells the LibraryCoordinator to display the details for the selected express item.
+        private void ExpressServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
+            coordinator.DisplayItemDetails(true);
         }
 
         //  Programming Requirements: 6.14
@@ -105,27 +78,52 @@ namespace IcarusDroneServiceApplication {
             coordinator.DeQueueItem(true);
         }
 
+        //  Programming Requirements: 6.16
+        //  This method tells the LibraryCoordinator to remove an Item from the finished work
+        //  list when the user double clicks on an Item in the list.
+        private void FinishedWorkList_MouseDoubleClick (object sender, MouseButtonEventArgs e){
+            coordinator.RemoveItemFromList();
+        }
+
+        //  Programming Requirements: 6.17
+        //  This method clears the input fields once a record has been added.
+        private void ClearInputFields (){
+            NameField.Clear();
+            DetailsField.Clear();
+            ProblemField.Clear();
+            ServiceCostTextBox.Clear();
+            ExpressSelected.IsChecked = false;
+            RegularSelected.IsChecked = false;
+        }
+
         //  This method tells the LibraryCoordinator to remove an Item from the finished work
         //  list when the user presses the finalise button.
         private void FinaliseButton_Click (object sender, RoutedEventArgs e){
             coordinator.RemoveItemFromList();
         }
 
-        //  This method tells the LibraryCoordinator to display the details for the selected regular item.
-        private void RegularServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
-            coordinator.DisplayItemDetails(false);
+        //  This method allows the Window to be moved around the screen.
+        private void Window_MouseDown (object sender, MouseButtonEventArgs e){
+            if (e.LeftButton == MouseButtonState.Pressed){
+                DragMove();
+            }
         }
 
-        //  This method tells the LibraryCoordinator to display the details for the selected express item.
-        private void ExpressServiceList_SelectionChanged (object sender, SelectionChangedEventArgs e){
-            coordinator.DisplayItemDetails(true);
+        //  This method minimises the Window when pressed.
+        private void BtnMinimise_Click (object sender, RoutedEventArgs e){
+            WindowState = WindowState.Minimized;
         }
 
-        //  Programming Requirements: 6.16
-        //  This method tells the LibraryCoordinator to remove an Item from the finished work
-        //  list when the user double clicks on an Item in the list.
-        private void FinishedWorkList_MouseDoubleClick (object sender, MouseButtonEventArgs e){
-            coordinator.RemoveItemFromList();
+        //  This method Closes the Application when pressed.
+        private void BtnClose_Click (object sender, RoutedEventArgs e){
+            Application.Current.Shutdown();
+        }
+
+        //  This method clears the contents of a TextBox when the user clicks into it.
+        private void TextBox_GotFocus (object sender, RoutedEventArgs e){
+            if (sender is TextBox textBox){
+                textBox.Clear();
+            }
         }
     }
 }

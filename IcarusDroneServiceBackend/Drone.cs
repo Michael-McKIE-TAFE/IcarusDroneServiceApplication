@@ -1,10 +1,5 @@
 ﻿namespace IcarusDroneServiceBackend {
-    /// <summary>
-    /// The `Drone` class models a drone with attributes such as client name, model, service problem, 
-    /// service cost, and service tag. It includes display properties for easy access to these attributes, 
-    /// a constructor to initialize them, and a method to return a formatted string with key details like 
-    /// the client's name and service cost. The class is primarily used for representing drone service information.
-    /// </summary>
+    //  Programming Requirements: 6.1
     public class Drone {
         private readonly string clientName;
         private readonly string droneModel;
